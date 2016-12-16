@@ -10,7 +10,7 @@ r10k_key_file="id-control_repo.rsa"
 r10k_remote="https://github.com/zoojar/control-repo"
 hiera_yaml_file="/etc/puppetlabs/hiera.yaml"
 console_admin_password="puppet"
-peinstaller_url='https://pm.puppetlabs.com/puppet-enterprise/2016.2.0/puppet-enterprise-2016.2.0-el-7-x86_64.tar.gz'
+if [ -z "$1" ]; then peinstaller_url='https://pm.puppetlabs.com/puppet-enterprise/2016.2.0/puppet-enterprise-2016.2.0-el-7-x86_64.tar.gz'; fi
 puppetmaster_fqdn="$(hostname -f)"
 
 firewall_default_zone=`sudo firewall-cmd --get-default-zone`
