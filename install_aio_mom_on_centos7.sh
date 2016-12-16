@@ -11,7 +11,8 @@ r10k_remote="https://github.com/zoojar/control-repo"
 hiera_yaml_file="/etc/puppetlabs/hiera.yaml"
 console_admin_password="puppet"
 regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-if ! [[ $1 =~ $regex_url ]] ; then peinstaller_url='https://pm.puppetlabs.com/cgi-bin/download.cgi?dist=el&rel=7&arch=x86_64&ver=latest'; fi
+peinstaller_url=$1
+if ! [[ $peinstaller_url =~ $regex_url ]] ; then peinstaller_url='https://pm.puppetlabs.com/cgi-bin/download.cgi?dist=el&rel=7&arch=x86_64&ver=latest'; fi
 puppetmaster_fqdn="$(hostname -f)"
 
 firewall_default_zone=`sudo firewall-cmd --get-default-zone`
