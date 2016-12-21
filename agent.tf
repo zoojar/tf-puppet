@@ -36,7 +36,7 @@ resource "vsphere_virtual_machine" "agent" {
   
   provisioner "remote-exec" {
     inline = [
-      "sudo echo -e \"${var.puppetmaster_ip} ${var.puppetmaster_fqdn} \\n\$(cat /etc/hosts)\" > /etc/hosts",
+      "sudo echo -e \"${var.puppetmaster_ip} ${var.puppetmaster_fqdn}\" >> /etc/hosts",
       "curl -k https://${var.puppetmaster_fqdn}:8140/packages/current/install.bash | sudo bash",
     ]
   }
