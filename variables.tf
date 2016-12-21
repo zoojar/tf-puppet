@@ -7,4 +7,4 @@ variable "gateway"            { default = "192.168.0.1" }
 variable "datacenter"         { default = "Datacenter 1" }
 variable "pe_installer_url"   {}
 variable "puppetmaster_fqdn"  {}
-variable "puppetmaster_ip"    {}
+variable "puppetmaster_ip"    { default = "https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz" }
