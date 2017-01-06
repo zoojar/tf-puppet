@@ -3,6 +3,9 @@ variable "dns_servers" {}
 variable "gateway" {}
 variable "datacenter" {}         
 variable "pe_installer_url" {}
+variable "vsphere_user" {}
+variable "vsphere_password" {}
+variable "vsphere_server" {}
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
