@@ -1,3 +1,8 @@
+variable "remote_exec_script" {}
+variable "dns_servers" {}
+variable "gateway" {}
+variable "datacenter" {}         
+variable "pe_installer_url" {}
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
