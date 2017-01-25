@@ -14,7 +14,7 @@ regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 peinstaller_url=$1
 if ! [[ $peinstaller_url =~ $regex_url ]] ; then peinstaller_url='https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz'; fi
 yum -y install facter
-puppetmaster_fqdn="$($(which facter) fqdn)"
+puppetmaster_fqdn="$(/usr/local/bin/facter fqdn)"
 
 firewall_default_zone=`sudo firewall-cmd --get-default-zone`
 echo "$(date) INFO: Configuring firewall: Opening ports 8140, 443, 61613 & 8142 for the default zone: ${firewall_default_zone}..." | tee -a  $log_file
