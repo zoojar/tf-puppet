@@ -16,6 +16,7 @@ if ! [[ $peinstaller_url =~ $regex_url ]] ; then peinstaller_url='https://s3.ama
 echo "$(date) Installing facter..." | tee -a  $log_file
 yum install epel-release -y ; yum -y install facter
 puppetmaster_fqdn="$(facter fqdn)"
+echo "$(date) Puppet Master Server FQDN is: $puppetmaster_fqdn (resolved using: facter fqdn)" | tee -a  $log_file
 
 firewall_default_zone=`sudo firewall-cmd --get-default-zone`
 echo "$(date) INFO: Configuring firewall: Opening ports 8140, 443, 61613 & 8142 for the default zone: ${firewall_default_zone}..." | tee -a  $log_file
