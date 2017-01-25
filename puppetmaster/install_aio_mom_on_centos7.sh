@@ -52,7 +52,7 @@ sudo $installer_file -c $conf_file
 echo "$(date) INFO: Configuring code manager..." | tee -a $log_file
 PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
 puppet agent -t
-puppet module install npwalker-pe_code_manager_webhook --version 1.0.11
+puppet module install npwalker-pe_code_manager_webhook --version 2.0.1
 chown -R pe-puppet:pe-puppet /etc/puppetlabs/code/
 puppet apply -e "include pe_code_manager_webhook::code_manager"
 
