@@ -10,3 +10,4 @@ curl -L "${autosign_exe_url}" > /etc/puppetlabs/puppet/autosign.sh
 chmod 500 /etc/puppetlabs/puppet/autosign.sh ; sudo chown pe-puppet /etc/puppetlabs/puppet/autosign.sh
 PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
 puppet config set autosign /etc/puppetlabs/puppet/autosign.sh --section master
+service pe-puppetserver restart
