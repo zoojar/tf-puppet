@@ -11,6 +11,7 @@ r10k_remote="https://github.com/zoojar/control-repo"
 hiera_yaml_file="/etc/puppetlabs/hiera.yaml"
 console_admin_password="puppet"
 regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+code_mgr_token_dir='/etc/puppetlabs/puppetserver/.puppetlabs'
 peinstaller_url=$1
 if ! [[ $peinstaller_url =~ $regex_url ]] ; then peinstaller_url='https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz'; fi
 echo "$(date) Installing facter..." | tee -a  $log_file
@@ -55,9 +56,11 @@ puppet agent -t
 puppet module install npwalker-pe_code_manager_webhook --version 2.0.1
 chown -R pe-puppet:pe-puppet /etc/puppetlabs/code/
 puppet apply -e "include pe_code_manager_webhook::code_manager"
+yum -y install jq
+cat $code_mgr_token_dir/code_manager_service_user_token | jq -r '.token' > $code_mgr_token_dir/code_manager_service_user_token_raw
+puppet code deploy --all --wait --token-file $code_mgr_token_dir/code_manager_service_user_token_raw
 
 echo "$(date) INFO: Setting console admin password..." | tee -a $log_file
 PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
 /opt/puppetlabs/puppet/bin/ruby /opt/puppetlabs/server/data/enterprise/modules/pe_install/files/set_console_admin_password.rb $console_admin_password
-
 
