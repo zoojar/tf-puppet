@@ -60,6 +60,10 @@ yum -y install jq
 cat $code_mgr_token_dir/code_manager_service_user_token | jq -r '.token' > $code_mgr_token_dir/code_manager_service_user_token_raw
 puppet code deploy --all --wait --token-file $code_mgr_token_dir/code_manager_service_user_token_raw
 
+echo "Configuring hiera..."
+cat /etc/puppetlabs/code/environments/production/hiera.yaml > /etc/puppetlabs/puppet/hiera.yaml
+service pe-puppetserver restart
+
 echo "$(date) INFO: Setting console admin password..." | tee -a $log_file
 PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
 /opt/puppetlabs/puppet/bin/ruby /opt/puppetlabs/server/data/enterprise/modules/pe_install/files/set_console_admin_password.rb $console_admin_password
