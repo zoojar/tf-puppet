@@ -62,7 +62,7 @@ cat $code_mgr_token_dir/code_manager_service_user_token | jq -r '.token' > $code
 puppet code deploy --all --wait --token-file $code_mgr_token_dir/code_manager_service_user_token_raw
 
 echo "$(date) INFO: Configuring hiera..." | tee -a $log_file
-curl $hiera_yaml_file_url > $hiera_yaml_file
+curl -k $hiera_yaml_file_url > $hiera_yaml_file
 service pe-puppetserver restart
 
 echo "$(date) INFO: Setting console admin password..." | tee -a $log_file
