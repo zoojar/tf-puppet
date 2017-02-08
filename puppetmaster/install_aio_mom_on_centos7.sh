@@ -8,6 +8,7 @@ installer_file="${installer_stagedir}/puppet-enterprise-installer"
 r10k_key_path="/etc/puppetlabs/puppetserver/ssh"
 r10k_key_file="id-control_repo.rsa"
 r10k_remote="https://github.com/zoojar/control-repo"
+hiera_yaml_file_url="https://raw.githubusercontent.com/zoojar/control-repo/production/hiera.yaml"
 hiera_yaml_file="/etc/puppetlabs/hiera.yaml"
 console_admin_password="puppet"
 regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -60,8 +61,8 @@ yum -y install jq
 cat $code_mgr_token_dir/code_manager_service_user_token | jq -r '.token' > $code_mgr_token_dir/code_manager_service_user_token_raw
 puppet code deploy --all --wait --token-file $code_mgr_token_dir/code_manager_service_user_token_raw
 
-echo "Configuring hiera..."
-cat /etc/puppetlabs/code/environments/production/hiera.yaml > /etc/puppetlabs/puppet/hiera.yaml
+echo "$(date) INFO: Configuring hiera..." | tee -a $log_file
+curl $hiera_yaml_file_url > $hiera_yaml_file
 service pe-puppetserver restart
 
 echo "$(date) INFO: Setting console admin password..." | tee -a $log_file
