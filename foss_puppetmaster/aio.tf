@@ -16,9 +16,9 @@ provider "vsphere" {
 }
 
 
-resource "vsphere_virtual_machine" "puppetmaster" {
+resource "vsphere_virtual_machine" "foss_puppetmaster" {
   count        = "1"
-  name         = "puppetmaster-${count.index}"
+  name         = "foss-puppetmaster-${count.index}"
   vcpu         = 2
   memory       = 8000
   datacenter   = "${var.datacenter}"
@@ -26,7 +26,7 @@ resource "vsphere_virtual_machine" "puppetmaster" {
 
   network_interface {
     label              = "VM Network"
-    ipv4_address       = "192.168.0.15${count.index}"
+    ipv4_address       = "192.168.0.12${count.index}"
     ipv4_prefix_length = "24"
     ipv4_gateway       = "${var.gateway}"
   }
