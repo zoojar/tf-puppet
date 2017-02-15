@@ -43,7 +43,7 @@ resource "vsphere_virtual_machine" "foss_puppetmaster" {
   }
 
   provisioner "file" {
-    source      = "/scripts"
+    source      = "scripts"
     destination = "/tmp"
   }
   
