@@ -43,13 +43,13 @@ resource "vsphere_virtual_machine" "puppetmaster" {
   }
 
   provisioner "file" {
-    source      = "${var.remote_exec_script}"
-    destination = "/tmp/${var.remote_exec_script}"
+    source      = "/scripts"
+    destination = "/tmp"
   }
   
   provisioner "remote-exec" {
     inline = [
-      ". /tmp/${var.remote_exec_script} ${var.pe_installer_url}",
+      ". /tmp/scripts/${var.remote_exec_script} ${var.pe_installer_url}",
     ]
   }
 
