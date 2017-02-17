@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Terminate on error...
+set -e
+
 #Defaults:
 log_file='/tmp/install_aio_mom.log'
 conf_file='/tmp/master.conf'
