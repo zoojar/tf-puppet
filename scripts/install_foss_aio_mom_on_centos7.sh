@@ -48,7 +48,7 @@ rpm -Uvh $repo_url
 #sudo $installer_file -c $conf_file
 
 echo "$(date) INFO: Installing puppetserver..." | tee -a $log_file
-yum install puppetserver
+yum -y install puppetserver
 
 #echo "$(date) INFO: Configuring code manager..." | tee -a $log_file
 #PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
