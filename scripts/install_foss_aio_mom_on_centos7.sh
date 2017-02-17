@@ -35,6 +35,9 @@ rpm -Uvh $repo_url
 echo "$(date) INFO: Installing puppetserver..." | tee -a $log_file
 yum -y install puppetserver
 
+echo "$(date) INFO: Setting env path for Puppet..." | tee -a $log_file
+PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
+
 echo "$(date) INFO: Configuring R10k..." | tee -a $log_file
 puppet module install puppet-r10k --version 4.2.0
 puppet apply -e "class {'r10k': remote => '$r10k_remote',}"
