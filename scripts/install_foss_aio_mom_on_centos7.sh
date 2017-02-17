@@ -9,7 +9,7 @@ r10k_key_path="/etc/puppetlabs/puppetserver/ssh"
 r10k_key_file="id-control_repo.rsa"
 r10k_remote="https://github.com/zoojar/control-repo"
 hiera_yaml_file_url="https://raw.githubusercontent.com/zoojar/control-repo/production/hiera.yaml"
-hiera_yaml_file="/etc/puppetlabs/hiera.yaml"
+hiera_yaml_file="/etc/puppetlabs/puppet/hiera.yaml"
 console_admin_password="puppet"
 regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 code_mgr_token_dir='/etc/puppetlabs/puppetserver/.puppetlabs'
@@ -32,39 +32,17 @@ firewall-cmd --reload
 echo "$(date) INFO: Downloading puppet repo: $repo_url..." | tee -a $log_file
 rpm -Uvh $repo_url
 
-#echo "$(date) INFO: Preparing the install config file..." | tee -a $log_file
-#cat <<EOF > $conf_file
-#{
-#  "console_admin_password": "$console_admin_password",
-#  "puppet_enterprise::puppet_master_host": "$puppetmaster_fqdn",
-#  "puppet_enterprise::use_application_services": true,
-#  "puppet_enterprise::profile::master::code_manager_auto_configure": true,
-#  "puppet_enterprise::profile::master::r10k_remote": "$r10k_remote",
-#  "puppet_enterprise::profile::master::r10k_private_key": "$r10k_key_path/$r10k_key_file"
-#}
-#EOF
-
-#echo "$(date) INFO: Installing puppet..." | tee -a $log_file
-#sudo $installer_file -c $conf_file
-
 echo "$(date) INFO: Installing puppetserver..." | tee -a $log_file
 yum -y install puppetserver
 
-#echo "$(date) INFO: Configuring code manager..." | tee -a $log_file
-#PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
-#puppet agent -t
-#puppet module install npwalker-pe_code_manager_webhook --version 2.0.1
-#chown -R pe-puppet:pe-puppet /etc/puppetlabs/code/
-#puppet apply -e "include pe_code_manager_webhook::code_manager"
-#yum -y install jq
-#cat $code_mgr_token_dir/code_manager_service_user_token | jq -r '.token' > $code_mgr_token_dir/code_manager_service_user_token_raw
-#puppet code deploy --all --wait --token-file $code_mgr_token_dir/code_manager_service_user_token_raw
+echo "$(date) INFO: Configuring R10k..." | tee -a $log_file
+puppet module install puppet-r10k --version 4.2.0
+puppet apply -e "class {'r10k': remote => '$r10k_remote',}"
+puppet code deploy environment
 
-#echo "$(date) INFO: Configuring hiera..." | tee -a $log_file
-#curl -k $hiera_yaml_file_url > $hiera_yaml_file
-#service pe-puppetserver restart
+echo "$(date) INFO: Configuring hiera..." | tee -a $log_file
+curl -k $hiera_yaml_file_url > $(puppet config print hiera_config)
 
-#echo "$(date) INFO: Setting console admin password..." | tee -a $log_file
-#PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
-#/opt/puppetlabs/puppet/bin/ruby /opt/puppetlabs/server/data/enterprise/modules/pe_install/files/set_console_admin_password.rb $console_admin_password
-
+echo "$(date) INFO: Enabling & starting puppetserver..." | tee -a $log_file
+puppet apply -e "service { 'puppetserver': enable => true, }"
+service puppetserver start
