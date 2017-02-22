@@ -10,7 +10,7 @@ variable "puppetmaster_fqdn" {}
 variable "role" {}
 variable "psk" {}
 variable "yumrepo" {}
-variable "hostname_prefix" {}
+variable "hostname_prefix" { "" }
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
