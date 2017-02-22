@@ -6,6 +6,11 @@ variable "pe_installer_url" {}
 variable "vsphere_user" {}
 variable "vsphere_password" {}
 variable "vsphere_server" {}
+variable "puppetmaster_ip" {}
+variable "puppetmaster_fqdn" {}
+variable "role" {}
+variable "psk" {}
+variable "yumrepo" {}
 
 resource "vsphere_virtual_machine" "agent" {
   count        = "1"
