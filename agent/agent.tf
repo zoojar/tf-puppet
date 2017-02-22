@@ -2,7 +2,6 @@ variable "remote_exec_script" {}
 variable "dns_servers" { type = "list" }
 variable "gateway" {}
 variable "datacenter" {}         
-variable "pe_installer_url" {}
 variable "vsphere_user" {}
 variable "vsphere_password" {}
 variable "vsphere_server" {}
