@@ -10,6 +10,7 @@ variable "puppetmaster_fqdn" {}
 variable "role" {}
 variable "psk" {}
 variable "yumrepo" {}
+variable "hostname_prefix" {}
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
@@ -21,7 +22,7 @@ provider "vsphere" {
 
 resource "vsphere_virtual_machine" "agent" {
   count        = "1"
-  name         = "agent-${count.index}"
+  name         = "${var.hostname_prefix}agent-${count.index}"
   vcpu         = 1
   memory       = 1000
   datacenter   = "${var.datacenter}"
