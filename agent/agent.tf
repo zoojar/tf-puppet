@@ -25,10 +25,15 @@ resource "vsphere_virtual_machine" "agent" {
     password = "root"
   }
   
+
+  provisioner "file" {
+    source      = "scripts"
+    destination = "/tmp"
+  }
+  
   provisioner "remote-exec" {
     inline = [
-      "sudo echo -e \"${var.puppetmaster_ip} ${var.puppetmaster_fqdn}\" >> /etc/hosts",
-      "curl -k https://${var.puppetmaster_fqdn}:8140/packages/current/install.bash | sudo bash",
+      ". /tmp/scripts/${var.remote_exec_script} --master_ip=${var.puppetmaster_ip} --master_fqdn=${var.puppetmaster_fqdn} --role=${var.role} --psk=${var.psk} --yumrepo=${var.yumrepo}",
     ]
   }
 
