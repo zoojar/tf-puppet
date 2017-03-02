@@ -16,7 +16,9 @@ hiera_yaml_file="/etc/puppetlabs/puppet/hiera.yaml"
 console_admin_password="puppet"
 regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 code_mgr_token_dir='/etc/puppetlabs/puppetserver/.puppetlabs'
+autosign_exe_url='https://raw.githubusercontent.com/zoojar/classified/master/autosign.sh'
 repo_url=$1
+autosigning_psk=$2
 if ! [[ $repo_url =~ $regex_url ]] ; then repo_url='https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm'; fi
 echo "$(date) Installing facter..." | tee -a  $log_file
 yum install epel-release -y ; yum -y install facter
@@ -48,6 +50,14 @@ r10k deploy environment -v
 
 echo "$(date) INFO: Configuring hiera..." | tee -a $log_file
 curl -k $hiera_yaml_file_url > $(puppet config print hiera_config)
+
+if [[ ! -z $autosigning_psk ]]; then
+  echo "$(date) INFO: Configuring autosigning..." | tee -a $log_file
+  echo $autosigning_psk >/etc/puppetlabs/puppet/global-psk
+  curl -L "${autosign_exe_url}" > /etc/puppetlabs/puppet/autosign.sh
+  chmod 500 /etc/puppetlabs/puppet/autosign.sh ; sudo chown puppet /etc/puppetlabs/puppet/autosign.sh
+  puppet config set autosign /etc/puppetlabs/puppet/autosign.sh --section master
+fi
 
 echo "$(date) INFO: Enabling & starting puppetserver..." | tee -a $log_file
 puppet apply -e "service { 'puppetserver': enable => true, }"
