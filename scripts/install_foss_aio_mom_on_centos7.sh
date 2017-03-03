@@ -19,6 +19,10 @@ code_mgr_token_dir='/etc/puppetlabs/puppetserver/.puppetlabs'
 autosign_exe_url='https://raw.githubusercontent.com/zoojar/classified/master/autosign.sh'
 repo_url=$1
 autosigning_psk=$2
+if [[ -z $autosigning_psk ]]; then
+  $autosigning_psk='d41d8cd98f00b204e9800998ecf8427e'
+fi 
+
 if ! [[ $repo_url =~ $regex_url ]] ; then repo_url='https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm'; fi
 echo "$(date) Installing facter..." | tee -a  $log_file
 yum install epel-release -y ; yum -y install facter
