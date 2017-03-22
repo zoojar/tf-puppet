@@ -59,7 +59,7 @@ if [[ ! -z $autosigning_psk ]]; then
   echo "$(date) INFO: Configuring autosigning..." | tee -a $log_file
   echo $autosigning_psk >/etc/puppetlabs/puppet/global-psk
   curl -L "${autosign_exe_url}" > /etc/puppetlabs/puppet/autosign.sh
-  chmod 500 /etc/puppetlabs/puppet/autosign.sh ; sudo chown puppet /etc/puppetlabs/puppet/autosign.sh`
+  chmod 500 /etc/puppetlabs/puppet/autosign.sh ; sudo chown puppet /etc/puppetlabs/puppet/autosign.sh
   puppet config set autosign /etc/puppetlabs/puppet/autosign.sh --section master
 fi
 
