@@ -7,6 +7,7 @@ variable "vsphere_user" {}
 variable "vsphere_password" {}
 variable "vsphere_server" {}
 variable "psk" {}
+variable "control_repo" {}
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
@@ -50,7 +51,7 @@ resource "vsphere_virtual_machine" "foss_puppetmaster" {
   
   provisioner "remote-exec" {
     inline = [
-      ". /tmp/scripts/${var.remote_exec_script} ${var.pe_installer_url} ${var.psk}",
+      ". /tmp/scripts/${var.remote_exec_script} --yumrepo=${var.pe_installer_url} --psk=${var.psk} --control_repo=${var.control_repo}",
     ]
   }
 
