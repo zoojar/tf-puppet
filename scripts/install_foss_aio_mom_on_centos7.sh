@@ -106,7 +106,7 @@ PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:/usr/bin:$P
 echo "$(date) INFO: Configuring R10k..." | tee -a $log_file
 puppet module install puppet-r10k --version 4.2.0
 puppet apply -e "class {'r10k': remote => '$r10k_remote',}"
-r10k deploy environment -v
+r10k deploy environment --puppetfile -v
 
 echo "$(date) INFO: Configuring Hiera..." | tee -a $log_file
 curl -k $hiera_yaml_file_url > $(puppet config print hiera_config)
