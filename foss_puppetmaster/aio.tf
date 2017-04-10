@@ -9,6 +9,9 @@ variable "vsphere_server" {}
 variable "psk" {}
 variable "control_repo" {}
 variable "ip_prefix" {}
+variable "template" { type = "string" default = "centos7-template" }
+variable "vm_network" { type = "string" default = "VM Network" }
+
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
@@ -28,15 +31,15 @@ resource "vsphere_virtual_machine" "foss_puppetmaster" {
   dns_servers  = "${var.dns_servers}"
 
   network_interface {
-    label              = "VM Network"
-    ipv4_address       = "${ip_prefix}${count.index}"
+    label              = "${var.vm_network}"
+    ipv4_address       = "${var.ip_prefix}${count.index}"
     ipv4_prefix_length = "24"
     ipv4_gateway       = "${var.gateway}"
   }
 
   disk {
     type     = "thin" 
-    template = "centos7-template" 
+    template = "${var.template}" 
   }
 
   connection {
