@@ -8,6 +8,7 @@ variable "vsphere_password" {}
 variable "vsphere_server" {}
 variable "psk" {}
 variable "control_repo" {}
+variable "ip_prefix" {}
 
 # Configure the VMware vSphere Provider
 provider "vsphere" {
@@ -28,7 +29,7 @@ resource "vsphere_virtual_machine" "foss_puppetmaster" {
 
   network_interface {
     label              = "VM Network"
-    ipv4_address       = "192.168.0.12${count.index}"
+    ipv4_address       = "${ip_prefix}${count.index}"
     ipv4_prefix_length = "24"
     ipv4_gateway       = "${var.gateway}"
   }
