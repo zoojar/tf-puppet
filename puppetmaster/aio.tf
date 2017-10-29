@@ -23,6 +23,7 @@ resource "vsphere_virtual_machine" "puppetmaster" {
   memory       = 8000
   datacenter   = "${var.datacenter}"
   dns_servers  = "${var.dns_servers}"
+ 
 
   network_interface {
     label              = "VM Network"
@@ -32,9 +33,10 @@ resource "vsphere_virtual_machine" "puppetmaster" {
   }
 
   disk {
-    type     = "thin" 
-    template = "centos7-template" 
-  }
+    type      = "thin" 
+    template  = "centos7-template" 
+    datastore = "default"  
+ }
 
   connection {
     type     = "ssh"
