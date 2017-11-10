@@ -5,7 +5,6 @@ set -e
 
 #Defaults:
 log_file='/tmp/install_aio_mom.log'
-conf_file='/tmp/master.conf'
 installer_stagedir='/tmp/peinstaller'
 installer_file="${installer_stagedir}/puppet-enterprise-installer"
 r10k_key_path="/etc/puppetlabs/puppetserver/ssh"
@@ -17,7 +16,9 @@ console_admin_password="puppet"
 regex_url='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 code_mgr_token_dir='/etc/puppetlabs/puppetserver/.puppetlabs'
 peinstaller_url=$1
+conf_file="$2"
 if ! [[ $peinstaller_url =~ $regex_url ]] ; then peinstaller_url='https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz'; fi
+if [[ $conf_file == "" ]] ; then conf_file='/tmp/master.conf'; fi
 echo "$(date) Installing facter..." | tee -a  $log_file
 yum install epel-release -y ; yum -y install facter
 puppetmaster_fqdn="$(facter fqdn)"
@@ -48,6 +49,7 @@ cat <<EOF > $conf_file
   "puppet_enterprise::profile::master::code_manager_auto_configure": true,
   "puppet_enterprise::profile::master::r10k_remote": "$r10k_remote",
   "puppet_enterprise::profile::master::r10k_private_key": "$r10k_key_path/$r10k_key_file"
+  "puppet_enterprise::profile::master::r10k_proxy": "http://1.1.1.1:1111"
 }
 EOF
 
