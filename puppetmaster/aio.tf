@@ -53,7 +53,7 @@ resource "vsphere_virtual_machine" "puppetmaster" {
     inline = [
       "${var.remote_exec_script}",
       'puppet module install WhatsARanjit-node_manager --version 0.6.0',
-      'puppet resource node_group "PE Master" | grep r10k_proxy',
+      "puppet resource node_group 'PE Master' | grep r10k_proxy",
     ]
   }
 
