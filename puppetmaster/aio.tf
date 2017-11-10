@@ -52,6 +52,8 @@ resource "vsphere_virtual_machine" "puppetmaster" {
   provisioner "remote-exec" {
     inline = [
       "${var.remote_exec_script}",
+      'puppet module install WhatsARanjit-node_manager --version 0.6.0',
+      'puppet resource node_group "PE Master" | grep r10k_proxy',
     ]
   }
 
