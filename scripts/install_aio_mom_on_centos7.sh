@@ -18,7 +18,6 @@ code_mgr_token_dir='/etc/puppetlabs/puppetserver/.puppetlabs'
 peinstaller_url=$1
 conf_file="$2"
 if ! [[ $peinstaller_url =~ $regex_url ]] ; then peinstaller_url='https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz'; fi
-if [[ $conf_file == "" ]] ; then conf_file='/tmp/master.conf'; fi
 echo "$(date) Installing facter..." | tee -a  $log_file
 yum install epel-release -y ; yum -y install facter
 puppetmaster_fqdn="$(facter fqdn)"
@@ -39,19 +38,21 @@ wget -q --timeout=1200 $peinstaller_url -O /tmp/peinstaller.tar.gz
 mkdir $installer_stagedir
 tar -xf /tmp/peinstaller.tar.gz --strip-components=1 -C $installer_stagedir
 
-
-echo "$(date) INFO: Preparing the install config file..." | tee -a $log_file
-cat <<EOF > $conf_file
-{
-  "console_admin_password": "$console_admin_password",
-  "puppet_enterprise::puppet_master_host": "$puppetmaster_fqdn",
-  "puppet_enterprise::use_application_services": true,
-  "puppet_enterprise::profile::master::code_manager_auto_configure": true,
-  "puppet_enterprise::profile::master::r10k_remote": "$r10k_remote",
-  "puppet_enterprise::profile::master::r10k_private_key": "$r10k_key_path/$r10k_key_file"
-  "puppet_enterprise::profile::master::r10k_proxy": "http://1.1.1.1:1111"
-}
-EOF
+if [[ $conf_file == "" ]] ; then 
+  conf_file='/tmp/master.conf'
+  echo "$(date) INFO: Preparing the install config file..." | tee -a $log_file
+  cat <<EOF > $conf_file
+  {
+    "console_admin_password": "$console_admin_password",
+    "puppet_enterprise::puppet_master_host": "$puppetmaster_fqdn",
+    "puppet_enterprise::use_application_services": true,
+    "puppet_enterprise::profile::master::code_manager_auto_configure": true,
+    "puppet_enterprise::profile::master::r10k_remote": "$r10k_remote",
+    "puppet_enterprise::profile::master::r10k_private_key": "$r10k_key_path/$r10k_key_file"
+    "puppet_enterprise::profile::master::r10k_proxy": "http://1.1.1.1:1111"
+  }
+  EOF
+; fi
 
 echo "$(date) INFO: Installing puppet..." | tee -a $log_file
 sudo $installer_file -c $conf_file
