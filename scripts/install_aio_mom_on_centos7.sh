@@ -52,7 +52,7 @@ cat <<EOF > $conf_file
   "puppet_enterprise::profile::master::r10k_proxy": "http://1.1.1.1:1111"
 }
 EOF
-; fi
+fi
 
 echo "$(date) INFO: Installing puppet..." | tee -a $log_file
 sudo $installer_file -c $conf_file
