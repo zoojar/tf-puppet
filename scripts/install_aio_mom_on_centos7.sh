@@ -59,7 +59,8 @@ sudo $installer_file -c $conf_file
 
 echo "$(date) INFO: Configuring code manager..." | tee -a $log_file
 PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
-puppet agent -t
+puppet agent -tv
+puppet agent -tv
 puppet module install npwalker-pe_code_manager_webhook --version 2.0.1
 chown -R pe-puppet:pe-puppet /etc/puppetlabs/code/
 puppet apply -e "include pe_code_manager_webhook::code_manager"
@@ -74,4 +75,6 @@ service pe-puppetserver restart
 echo "$(date) INFO: Setting console admin password..." | tee -a $log_file
 PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/opt/puppet/bin:$PATH"
 /opt/puppetlabs/puppet/bin/ruby /opt/puppetlabs/server/data/enterprise/modules/pe_install/files/set_console_admin_password.rb $console_admin_password
+
+
 
