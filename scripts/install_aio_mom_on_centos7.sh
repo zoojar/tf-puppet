@@ -54,6 +54,8 @@ cat <<EOF > $conf_file
 EOF
 fi
 
+exit 0
+
 echo "$(date) INFO: Installing puppet..." | tee -a $log_file
 sudo $installer_file -c $conf_file
 
