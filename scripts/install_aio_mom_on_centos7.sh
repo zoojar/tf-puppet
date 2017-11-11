@@ -38,23 +38,22 @@ wget -q --timeout=1200 $peinstaller_url -O /tmp/peinstaller.tar.gz
 mkdir $installer_stagedir
 tar -xf /tmp/peinstaller.tar.gz --strip-components=1 -C $installer_stagedir
 
-if [[ $conf_file == "" ]] ; then 
-conf_file='/tmp/master.conf'
-echo "$(date) INFO: Preparing the install config file..." | tee -a $log_file
-cat <<EOF > $conf_file
-{
-  "console_admin_password": "$console_admin_password",
-  "puppet_enterprise::puppet_master_host": "$puppetmaster_fqdn",
-  "puppet_enterprise::use_application_services": true,
-  "puppet_enterprise::profile::master::code_manager_auto_configure": true,
-  "puppet_enterprise::profile::master::r10k_remote": "$r10k_remote",
-  "puppet_enterprise::profile::master::r10k_private_key": "$r10k_key_path/$r10k_key_file"
-  "puppet_enterprise::profile::master::r10k_proxy": "http://1.1.1.1:1111"
-}
-EOF
-fi
+#if [[ $conf_file == "" ]] ; then 
+#conf_file='/tmp/master.conf'
+#echo "$(date) INFO: Preparing the install config file..." | tee -a $log_file
+#cat <<EOF > $conf_file
+# {
+#  "console_admin_password": "$console_admin_password",
+#  "puppet_enterprise::puppet_master_host": "$puppetmaster_fqdn",
+#  "puppet_enterprise::use_application_services": true,
+#  "puppet_enterprise::profile::master::code_manager_auto_configure": true,
+#  "puppet_enterprise::profile::master::r10k_remote": "$r10k_remote",
+#  "puppet_enterprise::profile::master::r10k_private_key": "$r10k_key_path/$r10k_key_file",
+#  "puppet_enterprise::profile::master::r10k_proxy": "http://1.1.1.1:1111"
+#}
+#EOF
+#fi
 
-exit 0
 
 echo "$(date) INFO: Installing puppet..." | tee -a $log_file
 sudo $installer_file -c $conf_file
